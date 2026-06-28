@@ -1,0 +1,50 @@
+{
+  "type": "quizAppExport",
+  "version": 1,
+  "exportId": "exp_mqxg3diqukxuyf",
+  "exportedAt": "2026-06-28T07:06:06.002Z",
+  "quizSets": [
+    {
+      "id": "set_mqxfw3ic4l7rvk",
+      "name": "quiz1",
+      "questions": [
+        {
+          "id": "q_mqxfwm4ispn140",
+          "text": "ジェンダーは何語？",
+          "choices": [
+            "英語",
+            "フランス語",
+            "ドイツ語",
+            "イタリア語"
+          ],
+          "correctIndex": 0,
+          "timeLimit": 10
+        },
+        {
+          "id": "q_mqxfxfjgtemey1",
+          "text": "東京の首都は？",
+          "choices": [
+            "京都",
+            "東京",
+            "名古屋",
+            "大阪"
+          ],
+          "correctIndex": 1,
+          "timeLimit": 10
+        },
+        {
+          "id": "q_mqxfyaknqllfee",
+          "text": "東京23区ではないのは？",
+          "choices": [
+            "杉並",
+            "足立",
+            "世田谷",
+            "多摩"
+          ],
+          "correctIndex": 3,
+          "timeLimit": 10
+        }
+      ]
+    }
+  ]
+}
