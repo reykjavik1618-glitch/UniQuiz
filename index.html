@@ -335,6 +335,40 @@ function render(){
 }
 
 /* ---------- HOME ---------- */
+function buildQuizGuidance(set){
+  const total = set.questions.length;
+  if(total === 0) return '';
+  let c4 = 0, c2 = 0, t = 0;
+  const limits = new Set();
+  set.questions.forEach(q=>{
+    if(q.type === 'text') t++;
+    else if(q.choices && q.choices.length === 2) c2++;
+    else c4++;
+    limits.add(q.timeLimit || DEFAULT_TIME_LIMIT);
+  });
+  const typeKinds = (c4>0?1:0) + (c2>0?1:0) + (t>0?1:0);
+  let typeText;
+  if(typeKinds <= 1){
+    if(c4>0) typeText = '4択から1つ正解と思うものを選んでください。';
+    else if(c2>0) typeText = '2択から1つ正解と思うものを選んでください。';
+    else typeText = '正解だと思う言葉を入力してください。';
+  } else {
+    const parts = [];
+    if(c4>0) parts.push(`4択${c4}問`);
+    if(c2>0) parts.push(`2択${c2}問`);
+    if(t>0) parts.push(`記述式${t}問`);
+    typeText = `${parts.join('・')}が含まれます。各問題の指示に従って回答してください。`;
+  }
+  let timeText;
+  if(limits.size === 1){
+    timeText = `回答時間は1問当たり${[...limits][0]}秒です。`;
+  } else {
+    const arr = [...limits].sort((a,b)=>a-b);
+    timeText = `回答時間は問題により異なります(${arr[0]}〜${arr[arr.length-1]}秒)。`;
+  }
+  return `全${total}問。${typeText}${timeText}`;
+}
+
 function renderHome(){
   const authed = isTeacherAuthed();
   let listHtml = '';
@@ -346,7 +380,7 @@ function renderHome(){
     listHtml = data.quizSets.map(s=>`
       <div class="card">
         <div class="card-title">📚 ${escapeHtml(s.name)}</div>
-        <div class="card-sub">${s.questions.length}問</div>
+        <div class="card-sub">${s.questions.length===0?'0問':escapeHtml(buildQuizGuidance(s))}</div>
         <div class="card-actions">
           <button onclick="startQuiz('${s.id}')" ${s.questions.length===0?'disabled':''}>▶️ 受験する</button>
           ${authed?`<button class="secondary" onclick="goToAdminQuestions('${s.id}')">⚙️ 問題を管理</button>`:''}
