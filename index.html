@@ -600,6 +600,8 @@ function renderAdminQuestions(){
         <div class="card-title">${idx+1}. ${escapeHtml(q.text)}</div>
         <div class="card-sub">${typeLabel} ／ ✅ 正解: ${answerLabel} ／ ⏱️ ${q.timeLimit}秒</div>
         <div class="card-actions">
+          <button class="secondary" onclick="moveQuestionUp('${q.id}')" ${idx===0?'disabled':''}>⬆️ 上へ</button>
+          <button class="secondary" onclick="moveQuestionDown('${q.id}')" ${idx===set.questions.length-1?'disabled':''}>⬇️ 下へ</button>
           <button class="secondary" onclick="editQuestion('${q.id}')">✏️ 編集</button>
           <button class="danger" onclick="deleteQuestion('${q.id}')">🗑️ 削除</button>
         </div>
@@ -639,6 +641,30 @@ function deleteQuestion(qid){
   if(!confirm('この問題を削除しますか?')) return;
   const set = getSet(currentSetId);
   set.questions = set.questions.filter(q=>q.id!==qid);
+  saveData();
+  render();
+}
+
+function moveQuestionUp(qid){
+  const set = getSet(currentSetId);
+  if(!set) return;
+  const idx = set.questions.findIndex(q=>q.id===qid);
+  if(idx <= 0) return;
+  const tmp = set.questions[idx-1];
+  set.questions[idx-1] = set.questions[idx];
+  set.questions[idx] = tmp;
+  saveData();
+  render();
+}
+
+function moveQuestionDown(qid){
+  const set = getSet(currentSetId);
+  if(!set) return;
+  const idx = set.questions.findIndex(q=>q.id===qid);
+  if(idx === -1 || idx >= set.questions.length-1) return;
+  const tmp = set.questions[idx+1];
+  set.questions[idx+1] = set.questions[idx];
+  set.questions[idx] = tmp;
   saveData();
   render();
 }
